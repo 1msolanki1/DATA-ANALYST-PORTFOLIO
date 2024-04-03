@@ -1,0 +1,337 @@
+---
+title: "Suicide_rates"
+author: '"Maithili Solanki"'
+date: "2024-03-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+suicide_rates <- read_csv("/Users/maithilisolanki/Desktop/Portfolio/R/suicide_rates.csv")
+```
+
+```{r}
+# Display the first few rows of the dataset
+head(suicide_rates)
+
+# Summary statistics for numerical variables
+summary(suicide_rates)
+
+# Structure of the dataset
+str(suicide_rates)
+
+# Dimensions of the dataset
+dim(suicide_rates)
+
+```
+
+```{r}
+# Check for missing values
+summary(is.na(suicide_rates))
+
+# Handle missing values (if any)
+suicide_rates <- na.omit(suicide_rates)
+
+# Convert data types if needed (e.g., converting factors to characters or vice versa)
+suicide_rates$Year <- as.factor(suicide_rates$Year)
+
+```
+
+```{r}
+mydata <- as.data.frame(suicide_rates)
+summary(suicide_rates)
+
+```
+```{r}
+# Example: Histogram of DeathRatePer100K
+hist(suicide_rates$DeathRatePer100K, main = "Distribution of Death Rate per 100K", xlab = "Death Rate per 100K")
+
+# Example: Boxplot of SuicideCount by Sex
+boxplot(SuicideCount ~ Sex, data = suicide_rates, main = "Suicide Count by Sex", xlab = "Sex", ylab = "Suicide Count")
+
+```
+```{r}
+# Example: Simple linear regression to predict DeathRatePer100K based on GDPPerCapita
+lm_model <- lm(DeathRatePer100K ~ GDPPerCapita, data = suicide_rates)
+summary(lm_model)
+```
+```{r}
+# Remove duplicate rows
+suicide_rates <- unique(suicide_rates)
+
+# Convert character variables to factors if necessary
+suicide_rates$RegionCode <- as.factor(suicide_rates$RegionCode)
+suicide_rates$CountryName <- as.factor(suicide_rates$CountryName)
+suicide_rates$Sex <- as.factor(suicide_rates$Sex)
+
+# Create a new variable for suicide rate per 100,000 population
+suicide_rates$SuicideRatePer100K <- (suicide_rates$SuicideCount / suicide_rates$Population) * 100000
+
+#Visualization - Bar plot of suicide counts by year
+library(ggplot2)
+ggplot(suicide_rates, aes(x = Year, y = SuicideCount, fill = Sex)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Suicide Counts by Year and Sex",
+       x = "Year",
+       y = "Suicide Count") +
+  theme_minimal()
+
+
+#Summary statistics
+summary(suicide_rates$SuicideRatePer100K)
+```
+```{r}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+
+# Check the structure of your dataset
+str(suicide_rates)
+
+# Assuming the 'Year' and 'CountryName' columns are in the correct data types
+# Convert 'Year' to numeric if necessary
+suicide_rates$Year <- as.numeric(suicide_rates$Year)
+
+# Country-Level Analysis
+country_summary <- suicide_rates %>%
+  group_by(CountryName) %>%
+  summarise(mean_suicide_rate = mean(DeathRatePer100K),
+            total_suicide_count = sum(SuicideCount),
+            mean_gdp = mean(GDP, na.rm = TRUE))  # Add na.rm = TRUE to handle missing values
+
+# Visualization
+# Bar plot of Averag suicide rate by country
+ggplot(country_summary, aes(x = CountryName, y = mean_suicide_rate)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Country", y = "Average Suicide Rate") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+# Scatter plot of GDP vs. suicide rate
+ggplot(country_summary, aes(x = mean_gdp, y = mean_suicide_rate)) +
+  geom_point() +
+  labs(x = "Mean GDP", y = "Averag Suicide Rate")
+
+
+```
+```{r}
+# Region-Level Analysis
+region_summary <- suicide_rates %>%
+  group_by(RegionName) %>%
+  summarise(avg_suicide_rate = sum(DeathRatePer100K * Population) / sum(Population),
+            total_suicide_count = sum(SuicideCount),
+            avg_gdp = sum(GDP * Population) / sum(Population))  # Calculate weighted average GDP
+
+# Visualization
+# Bar plot of average suicide rate by region
+ggplot(region_summary, aes(x = RegionName, y = avg_suicide_rate)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Region", y = "Average Suicide Rate") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+# Scatter plot of GDP vs. suicide rate by region
+ggplot(region_summary, aes(x = avg_gdp, y = avg_suicide_rate)) +
+  geom_point() +
+  labs(x = "Average GDP", y = "Average Suicide Rate") +
+  facet_wrap(~RegionName)  # Separate plots for each region
+
+```
+
+```{r}
+# Bar plot of Suicide Count over the years
+ggplot(suicide_rates, aes(x = factor(Year), y = SuicideCount)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Suicide Count by Year",
+       x = "Year",
+       y = "Suicide Count") +
+  theme_minimal()
+
+```
+
+
+```{r}
+# Boxplot for outlier detection
+boxplot(suicide_rates$SuicideCount, main = "Boxplot of Suicide Count")
+```
+
+```{r}
+#Scatter plot to explore the relationship between Suicide Count and GDP per Capita
+ggplot(suicide_rates, aes(x = GDPPerCapita, y = SuicideCount)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Suicide Count vs. GDP per Capita",
+       x = "GDP Per Capita",
+       y = "Suicide Count") +
+  theme_minimal()
+
+```
+```{r}
+# Example: Scatter plot with regression line
+plot(suicide_rates$GDPPerCapita, suicide_rates$DeathRatePer100K, main = "Scatter Plot of GDP Per Capita vs. Death Rate", xlab = "GDP Per Capita", ylab = "Death Rate per 100K")
+abline(lm_model, col = "red")
+
+```
+
+```{r}
+# Example: Two-sample independent t-test
+# Hypothesis: Is there a significant difference in SuicideCount between males and females?
+
+# Subset data for male and female groups
+male_data <- subset(suicide_rates, Sex == "Male")
+female_data <- subset(suicide_rates, Sex == "Female")
+
+# Perform t-test
+t_test_result <- t.test(male_data$SuicideCount, female_data$SuicideCount)
+
+# Print the results
+print(t_test_result)
+
+```
+
+```{r}
+# Load necessary library
+library(stats)
+
+# Define predictor variables (features)
+predictor_variables <- c("Year", "Population", "GDP", "GDPPerCapita", "GNI", "GNIPerCapita", "InflationRate", "EmploymentPopulationRatio")
+
+# Define target variable
+target_variable <- "DeathRatePer100K"  # Update to match the actual column name
+
+# Subset the dataset to include only the predictor and target variables
+subset_data <- suicide_rates[, c(predictor_variables, target_variable), drop = FALSE]
+
+# Build linear regression model
+regression_model <- lm(subset_data[[target_variable]] ~ ., data = subset_data[, predictor_variables])
+
+# Summarize the model
+summary(regression_model)
+```
+
+```{r}
+# Define predictor variables (features)
+predictor_variables <- c("Year", "Population", "GDP", "GDPPerCapita", "GNI", "GNIPerCapita", "InflationRate", "EmploymentPopulationRatio")
+
+# Define target variable
+target_variable <- "DeathRatePer100K"  # Update to match the actual column name
+
+# Empty list to store selected variables
+selected_variables <- c()
+
+# Initialize an empty model
+best_model <- lm(suicide_rates[[target_variable]] ~ 1, data = suicide_rates)
+
+# Forward selection loop
+for (predictor in predictor_variables) {
+  formula <- as.formula(paste(target_variable, "~", paste(selected_variables, collapse = " + "), "+", predictor))
+  model <- lm(formula, data = suicide_rates)
+  
+
+  # Perform backward selection
+forward_model <- step(full_model, direction = "forward", scope = list(upper = ~.))
+  
+  
+  
+  # Check if the current model has a better fit than the previous best model
+  if (AIC(model) < AIC(best_model)) {
+    best_model <- model
+    selected_variables <- c(selected_variables, predictor)
+  }
+}
+
+# Summary of the best model
+summary(best_model)
+```
+
+```{r}
+# Load necessary library
+library(stats)
+
+# Define predictor variables (features)
+predictor_variables <- c("Year", "Population", "GDP", "GDPPerCapita", "GNI", "GNIPerCapita", "InflationRate", "EmploymentPopulationRatio")
+
+# Define target variable
+target_variable <- "DeathRatePer100K"  # Update to match the actual column name
+
+# Initialize with the full model
+full_model <- lm(suicide_rates[[target_variable]] ~ ., data = suicide_rates)
+
+# Suppress the warning
+suppressWarnings({
+  # Perform backward selection
+  backward_model <- step(full_model, direction = "backward", scope = list(upper = ~.))
+
+  # Summary of the backward selected model
+  summary(backward_model)
+})
+
+
+```
+
+```{r}
+ library(Metrics)
+
+# Calculate predicted values
+predicted_values <- predict(best_model, newdata = suicide_rates)
+
+# Check for missing values in the predicted values and actual target variable values
+missing_values <- sum(is.na(predicted_values)) + sum(is.na(suicide_rates$DeathRatePer100K))
+
+if (missing_values > 0) {
+  print("Warning: Missing values found in the predicted or actual values. Removing rows with missing values.")
+  
+  # Remove rows with missing values
+  suicide_rates <- na.omit(suicide_rates)
+  predicted_values <- predicted_values[complete.cases(suicide_rates$DeathRatePer100K), ]
+}
+
+# Ensure the lengths of the actual and predicted values are the same
+if (length(suicide_rates$DeathRatePer100K) != length(predicted_values)) {
+  stop("Error: Lengths of actual and predicted values are not the same.")
+}
+
+# Calculate Mean Absolute Error (MAE)
+mae <- mae(suicide_rates$DeathRatePer100K, predicted_values)
+print(paste("Mean Absolute Error (MAE):", mae))
+
+# Calculate Mean Squared Error (MSE)
+mse <- mse(suicide_rates$DeathRatePer100K, predicted_values)
+print(paste("Mean Squared Error (MSE):", mse))
+
+
+```
+
+```{r}
+# Load the ggplot2 package
+library(ggplot2)
+
+# Prediction models
+randIndex <- sample(1:nrow(suicide_rates))
+cutpoint2_3 <- floor(2 * nrow(suicide_rates) / 5)
+
+# Use 80% of dataset as training set and remaining 20% as testing set
+sample <- sample(c(TRUE, FALSE), nrow(suicide_rates), replace = TRUE, prob = c(0.8, 0.2))
+train <- suicide_rates[sample, ]
+test <- suicide_rates[!sample, ]
+
+#------------------------------------------------------lm model
+model <- lm(SuicideCount ~ CauseSpecificDeathPercentage + StdDeathRate + DeathRatePer100K + Population + GDP + GDPPerCapita + GNI + GNIPerCapita + InflationRate + EmploymentPopulationRatio, data = train)
+summary(model)
+lmPred <- predict(model, test, interval = "prediction", level = 0.95)
+summary(lmPred)
+head(lmPred)
+
+# 1. Add predictions 
+mydata1 <- cbind(test, lmPred)
+head(mydata1)
+
+# 2. Regression line + confidence intervals
+p <- ggplot(mydata1, aes(fit, SuicideCount)) +
+  geom_point() +
+  stat_smooth(method = lm)
+
+# 3. Add prediction intervals
+p + geom_line(aes(y = lwr), color = "red", linetype = "dashed") +
+  geom_line(aes(y = upr), color = "red", linetype = "dashed") +
+  xlab("Predicted Suicide Count") + ylab("Actual Suicide Count")
+
+```
