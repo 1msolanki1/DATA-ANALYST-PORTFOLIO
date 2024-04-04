@@ -20,10 +20,14 @@ University of Mumbai, Mumbai: Bachelor's degree, Electronics and Telecommunicati
 
 The best way to showcase skills is by doing and sharing your job done but sometimes certificates appear to be as an indirect result. Here's a list of the ones I have (in reverse-chronological order, with the date of completion in brackets):
 
-<li>Google Data Analytics Professional Certificate (Sep 2022) (Coursera - Google)</li>
-<li>Tableau (Oct 2022) (Coursera - University of California, Davis)</li>
-<li>Python for Data Science (Feb 2023) (Coursera - University of Colorado Boulder)</li>
+<ul>
+  <li><a href="https://www.kaggle.com/learn/certification/smaithili/data-visualization" target="_blank">Data Visualization Certificate </a>(Jun 2023) (Kaggle)</li>
+  <li><a href="https://courses.cognitiveclass.ai/certificates/e55e4ca7378f4069aa268a9e6866e536" target="_blank">SQL and Relational Database </a>(Jul 2023) (Cognitive Class- IBM Developer Skills Network)</li>
+  <li><a href="https://olympus.mygreatlearning.com/courses/82319/certificate" target="_blank">Data Analytics using Excel </a>(Aug 2023) (Great Learning)</li>
+  <li><a href="https://www.credly.com/earner/earned/badge/8a1d659f-880f-40df-a457-895174bfe0cf" target="_blank">Introduction to Data Science </a>(Feb 2024) (Cisco- Network Academy)</li>
+</ul>
+
 
 <h1>Contacts</h1>
-<li>LinkedIn: https://www.linkedin.com/in/maithilisolanki/</li>
+<li><a href="https://www.linkedin.com/in/maithilisolanki/" target="_blank">LinkedIn Profile</a></li>
 <li>Email: msolanki2604@gmail.com</li>
