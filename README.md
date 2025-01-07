@@ -18,7 +18,7 @@ University of Mumbai, Mumbai: Bachelor's degree, Electronics and Telecommunicati
 
 <h1>Certificates</h1>
 
-The best way to showcase skills is by doing and sharing your job done but sometimes certificates appear to be as an indirect result. Here's a list of the ones I have (in reverse-chronological order, with the date of completion in brackets):
+The best way to showcase skills is by doing and sharing your job done but sometimes certificates appear to be as an indirect result. Here's a list of the ones I have:
 
 <ul>
   <li><a href="https://www.kaggle.com/learn/certification/smaithili/data-visualization" target="_blank">Data Visualization Certificate </a>(Jun 2023) (Kaggle)</li>
@@ -30,4 +30,4 @@ The best way to showcase skills is by doing and sharing your job done but someti
 
 <h1>Contacts</h1>
 <li><a href="https://www.linkedin.com/in/maithilisolanki/" target="_blank">LinkedIn Profile</a></li>
-<li>Email: msolanki2604@gmail.com</li>
+<li>Email: solankimaithili50@gmail.com</li>
