@@ -30,4 +30,4 @@ The best way to showcase skills is by doing and sharing your job done but someti
 
 <h1>Contacts</h1>
 <li><a href="https://www.linkedin.com/in/maithilisolanki/" target="_blank">LinkedIn Profile</a></li>
-<li>Email: msolanki2604@gmail.com</li>
+<li>Email: solankimaithili50@gmail.com</li>
